@@ -45,7 +45,7 @@ jobs:
       - checkout
       - unless:
           condition: &is_windows_executor
-            equal: [<<parameters.os>>, windows]
+            equal: [<<parameters.os>>, windows/default]
           steps:
             - node/install: &install_specified_version_install
                 node-version: "13.11.0"
@@ -188,11 +188,11 @@ workflows:
       - integration-test-install-specified-version:
           matrix:
             parameters:
-              os: [linux, macos, windows]
+              os: [linux, macos, windows/default]
       - integration-test-install-latest:
           matrix:
             parameters:
-              os: [linux, macos, windows]
+              os: [linux, macos, windows/default]
       - integration-test-install-lts:
           matrix:
             parameters:
