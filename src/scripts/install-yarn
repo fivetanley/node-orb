@@ -2,8 +2,12 @@
 
 set -e -o pipefail
 
-uname
-if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
+if which sudo; then
+  if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
+else
+  # windows most likely
+  export SUDO =""
+fi
 
 # FUNCTIONS
 get_yarn_version () {
