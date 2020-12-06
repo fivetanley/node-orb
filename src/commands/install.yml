@@ -60,12 +60,12 @@ parameters:
 
 steps:
   - unless:
-    # NVM is already installed on windows
-    condition: <<parameters.windows>>
-    steps:
-      - run:
-        name: Install NVM
-        command: <<include(scripts/install-nvm)>>
+      # NVM is already installed on windows
+      condition: <<parameters.windows>>
+      steps:
+        - run:
+            name: Install NVM
+            command: <<include(scripts/install-nvm)>>
   - run:
       name: Install NodeJS <<^parameters.lts>> <<parameters.node-version>> <</parameters.lts>> <<#parameters.lts>> LTS <</parameters.lts>>
       command: |

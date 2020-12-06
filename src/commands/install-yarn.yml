@@ -29,7 +29,8 @@ steps:
       steps:
         - run:
             <<: *install_yarn
-            command: choco install yarn <<#parameters.version>>--version << parameters.version >></#parameters.version>
+            command: |
+              choco install yarn <<#parameters.version>>--version << parameters.version >><</parameters.version>>
   - unless:
       condition: << parameters.windows >>
       steps:

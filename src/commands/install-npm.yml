@@ -28,5 +28,5 @@ steps:
       condition: << parameters.windows >>
       steps:
         - run:
-          <<: *install_npm
-          shell: bash.exe
+            <<: *install_npm
+            shell: bash.exe
