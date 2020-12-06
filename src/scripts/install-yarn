@@ -4,15 +4,19 @@ set -e -o pipefail
 
 if which sudo; then
   if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
+  export DEV_NULL=""${DEV_NULL}""
 else
   # windows most likely
-  export SUDO =""
+  export SUDO=""
+  # "${DEV_NULL}" doesn't exist on windows;
+  # NUL is the windows equivalent
+  export DEV_NULL="NUL"
 fi
 
 # FUNCTIONS
 get_yarn_version () {
   if [[ $YARN_VERSION == "" ]]; then
-    YARN_ORB_VERSION=$(curl -Ls -o /dev/null -w %{url_effective} \
+    YARN_ORB_VERSION=$(curl -Ls -o ${DEV_NULL} -w %{url_effective} \
       "https://github.com/yarnpkg/yarn/releases/latest" | sed 's:.*/::' | cut -d 'v' -f 2 | cut -d 'v' -f 2)
     echo "Latest version of Yarn is $YARN_ORB_VERSION"
   else
@@ -24,29 +28,29 @@ get_yarn_version () {
 
 installation_check () {
   echo "Checking if YARN is already installed..."
-  if command -v yarn > /dev/null 2>&1; then
-    if yarn --version | grep "$YARN_ORB_VERSION" > /dev/null 2>&1; then
+  if command -v yarn > "${DEV_NULL}" 2>&1; then
+    if yarn --version | grep "$YARN_ORB_VERSION" > "${DEV_NULL}" 2>&1; then
       echo "Yarn $YARN_ORB_VERSION is already installed"
       exit 0
     else
       echo "A different version of Yarn is installed ($(yarn --version)); removing it"
 
-      if uname -a | grep Darwin > /dev/null 2>&1; then
-        brew uninstall yarn > /dev/null 2>&1
-      elif cat /etc/issue | grep Alpine > /dev/null 2>&1; then
-        apk del yarn > /dev/null 2>&1
-      elif cat /etc/issue | grep Debian > /dev/null 2>&1; then
-        $SUDO apt-get remove yarn > /dev/null 2>&1 && \
-          $SUDO apt-get purge yarn > /dev/null 2>&1
-      elif cat /etc/issue | grep Ubuntu > /dev/null 2>&1; then
-        $SUDO apt-get remove yarn > /dev/null 2>&1 && \
-          $SUDO apt-get purge yarn > /dev/null 2>&1
-      elif command -v yum > /dev/null 2>&1; then
-        yum remove yarn > /dev/null 2>&1
+      if uname -a | grep Darwin > "${DEV_NULL}" >&1; then
+        brew uninstall yarn > "${DEV_NULL}" 2>&1
+      elif cat /etc/issue | grep Alpine > "${DEV_NULL}" 2>&1; then
+        apk del yarn > "${DEV_NULL}" 2>&1
+      elif cat /etc/issue | grep Debian > "${DEV_NULL}" 2>&1; then
+        $SUDO apt-get remove yarn > "${DEV_NULL}" 2>&1 && \
+          $SUDO apt-get purge yarn > "${DEV_NULL}" 2>&1
+      elif cat /etc/issue | grep Ubuntu > "${DEV_NULL}" 2>&1; then
+        $SUDO apt-get remove yarn > "${DEV_NULL}" 2>&1 && \
+          $SUDO apt-get purge yarn > "${DEV_NULL}" 2>&1
+      elif command -v yum > "${DEV_NULL}" 2>&1; then
+        yum remove yarn > "${DEV_NULL}" 2>&1
       fi
 
-      $SUDO rm -rf "$HOME/.yarn" > /dev/null 2>&1
-      $SUDO rm -f /usr/local/bin/yarn /usr/local/bin/yarnpkg > /dev/null 2>&1
+      $SUDO rm -rf "$HOME/.yarn" > "${DEV_NULL}" 2>&1
+      $SUDO rm -f /usr/local/bin/yarn /usr/local/bin/yarnpkg > "${DEV_NULL}" 2>&1
     fi
   fi
 }

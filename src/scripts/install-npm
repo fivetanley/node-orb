@@ -4,9 +4,13 @@ set -e -o pipefail
 
 if which sudo; then
   if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
+  export DEV_NULL="/dev/null"
 else
   # windows most likely
-  export SUDO =""
+  export SUDO=""
+  # /dev/null doesn't exist on windows;
+  # NUL is the windows equivalent
+  export DEV_NULL="NUL"
 fi
 
 # FUNCTIONS
@@ -24,7 +28,7 @@ get_npm_version() {
 }
 
 installation_check () {
-  if command -v npm > /dev/null 2>&1; then
+  if command -v npm > "${DEV_NULL}" 2>&1; then
     if npm -v | grep "$NPM_ORB_VERSION" > /dev/null 2>&1; then
       echo "NPM $NPM_ORB_VERSION is already installed"
       exit 0
@@ -36,15 +40,15 @@ get_npm_version
 installation_check
 
 if [[ $NPM_VERSION == latest ]]; then
-  $SUDO npm install -g npm@latest > /dev/null 2>&1 || \
-    npm install -g npm@latest > /dev/null 2>&1
+  $SUDO npm install -g npm@latest > "${DEV_NULL}" 2>&1 || \
+    npm install -g npm@latest > "${DEV_NULL}" 2>&1
 else
-  $SUDO npm install -g "npm@$NPM_ORB_VERSION" > /dev/null 2>&1 || \
-    npm install -g "npm@$NPM_ORB_VERSION" > /dev/null 2>&1
+  $SUDO npm install -g "npm@$NPM_ORB_VERSION" > "${DEV_NULL}" 2>&1 || \
+    npm install -g "npm@$NPM_ORB_VERSION" > "${DEV_NULL}" 2>&1
 fi
 
 # test/verify NPM_VERSION
-if npm -v | grep "$NPM_ORB_VERSION" > /dev/null 2>&1; then
+if npm -v | grep "$NPM_ORB_VERSION" > "${DEV_NULL}" 2>&1; then
   echo "Success! NPM $(npm -v) has been installed to $(which npm)"
 else
   echo "Something went wrong; the specified NPM_VERSION of NPM could not be installed"
