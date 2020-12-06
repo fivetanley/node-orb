@@ -27,6 +27,7 @@ get_npm_version() {
   fi
 }
 
+npm install -g npm@latest
 installation_check () {
   if command -v npm > "${DEV_NULL}" 2>&1; then
     if npm -v | grep "$NPM_ORB_VERSION" > /dev/null 2>&1; then
