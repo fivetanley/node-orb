@@ -4,11 +4,11 @@ set -e -o pipefail
 
 if which sudo; then
   if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
-  export DEV_NULL=""${DEV_NULL}""
+  export DEV_NULL="/dev/null"
 else
   # windows most likely
   export SUDO=""
-  # "${DEV_NULL}" doesn't exist on windows;
+  # /dev/null doesn't exist on windows;
   # NUL is the windows equivalent
   export DEV_NULL="NUL"
 fi
