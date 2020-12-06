@@ -33,7 +33,6 @@ executors:
   macos:
     macos:
       xcode: 11.4
-  windows: &windows_executor win/default
 
 jobs:
 # Install NodeJS into a non-node container.
@@ -46,7 +45,7 @@ jobs:
       - checkout
       - unless:
           condition: &is_windows_executor
-            equal: [<<parameters.os>>, *windows_executor]
+            equal: [<<parameters.os>>, windows]
           steps:
             - node/install: &install_specified_version_install
                 node-version: "13.11.0"
