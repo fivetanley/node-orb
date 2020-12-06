@@ -35,7 +35,7 @@ steps:
       steps:
         - run: &check_yarn
             name: Check Yarn Installation
-            command: <<include(scripts/check-yarn)>>
+            command: <<include(scripts/check-yarn-version)>>
             environment:
               YARN_VERSION: << parameters.version >>
   - when:
