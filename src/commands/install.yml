@@ -76,9 +76,11 @@ steps:
       steps:
         - install-npm:
             version: <<parameters.npm-version>>
+            windows: <<parameters.windows>>
 
   - when:
       condition: <<parameters.install-yarn>>
       steps:
         - install-yarn:
             version: <<parameters.yarn-version>>
+            windows: <<parameters.windows>>
