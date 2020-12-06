@@ -27,6 +27,10 @@ steps:
   - when:
       condition: << parameters.windows >>
       steps:
-        - run:
-            <<: *install_npm
-            shell: bash.exe
+        run:
+            name: Install NPM
+            shell: powershell.exe
+            command: |
+              Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
+              npm install --global --production npm-windows-upgrade
+              npm-windows-upgrade --npm-version << parameters.version >>
