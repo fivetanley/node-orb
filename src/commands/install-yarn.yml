@@ -29,8 +29,7 @@ steps:
       steps:
         - run:
             <<: *install_yarn
-            command: |
-              choco install yarn <<#parameters.version>>--version << parameters.version >><</parameters.version>>
+            command: npm install -g yarn@<< parameters.version >>
   - unless:
       condition: << parameters.windows >>
       steps:
