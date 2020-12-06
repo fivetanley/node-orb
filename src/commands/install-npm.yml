@@ -29,8 +29,7 @@ steps:
       steps:
         run:
             name: Install NPM
-            shell: powershell.exe
-            command: |
-              Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
-              npm install --global --production npm-windows-upgrade
-              npm-windows-upgrade --npm-version << parameters.version >>
+            command: <<include(scripts/install-npm.bat)>>
+            shell: cmd.exe
+            environment:
+              NPM_VERSION: << parameters.version >>
