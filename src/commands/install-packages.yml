@@ -46,6 +46,7 @@ steps:
       steps:
         - run: &check_package_json
             name: Checking for package.json
+            working_directory: <<parameters.app-dir>>
             command: |
               if [ ! -f "package.json" ]; then
                 echo
