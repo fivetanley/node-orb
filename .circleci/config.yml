@@ -27,10 +27,10 @@ integration-tests: &integration-tests
   ]
 
 executors:
-  linux:
+  linux: &linux_executor
     docker:
       - image: cimg/base:stable
-  macos:
+  macos: &macos_executor
     macos:
       xcode: 11.4
 
@@ -45,7 +45,11 @@ jobs:
       - checkout
       - unless:
           condition: &is_windows_executor
-            equal: [<<parameters.os>>, windows/default]
+            and:
+              - not:
+                  equal: [ <<parameters.os>>, *macos_executor ]
+              - not:
+                  equal: [ <<parameters.os>>, *linux_executor ]
           steps:
             - node/install: &install_specified_version_install
                 node-version: "13.11.0"

@@ -61,7 +61,8 @@ parameters:
 steps:
   - unless:
       # NVM is already installed on windows
-      condition: <<parameters.windows>>
+      condition:
+        equal: [<<parameters.windows>>, true]
       steps:
         - run:
             name: Install NVM
